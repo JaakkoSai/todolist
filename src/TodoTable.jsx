@@ -7,11 +7,15 @@ function TodoTable(props) {
           <tr>
             <th>Date</th>
             <th>Description</th>
+            <th>Actions</th>
           </tr>
           {props.todos.map((item, index) => (
             <tr key={index}>
               <td>{item.date}</td>
               <td>{item.description}</td>
+              <td>
+                <button onClick={() => props.deleteTodo(index)}>Delete</button>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -19,4 +23,5 @@ function TodoTable(props) {
     </>
   );
 }
+
 export default TodoTable;
