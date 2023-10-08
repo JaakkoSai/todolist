@@ -18,6 +18,13 @@ function Todolist() {
     setTodo({ ...todo, [event.target.name]: event.target.value });
   };
 
+  const handleDateChange = (date) => {
+    setTodo((prevTodo) => ({
+      ...prevTodo,
+      date: date.format("YYYY-MM-DD"),
+    }));
+  };
+
   const addTodo = (event) => {
     setTodos([...todos, todo]);
   };
@@ -59,15 +66,15 @@ function Todolist() {
         justifyContent="center"
         alignItems="center"
       >
-        <TextField
+        <DatePicker
           label="Date"
           variant="standard"
           name="date"
           value={todo.date}
-          onChange={inputChanged}
+          onChange={(date) => handleDateChange(date)}
         />
 
-        <DatePicker
+        <TextField
           label="Description"
           variant="standard"
           name="description"
