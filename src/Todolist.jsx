@@ -3,6 +3,11 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-material.css";
 import { useRef } from "react";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Stack from "@mui/material/Stack";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 function Todolist() {
   const [todo, setTodo] = useState({ description: "", date: "", priority: "" });
@@ -20,7 +25,7 @@ function Todolist() {
     if (gridRef.current.getSelectedNodes().length > 0) {
       setTodos(
         todos.filter(
-          (todo, index) => index != gridRef.current.getSelectedNodes()[0].id
+          (todo, index) => index !== gridRef.current.getSelectedNodes()[0].id
         )
       );
     } else {
@@ -47,57 +52,58 @@ function Todolist() {
   ];
 
   return (
-    <div>
-      <input
-        type="text"
-        onChange={inputChanged}
-        placeholder="Description"
-        name="description"
-        value={todo.description}
-      />
-      <input
-        type="text"
-        onChange={inputChanged}
-        placeholder="Date"
-        name="date"
-        value={todo.date}
-      />
-      <input
-        type="text"
-        onChange={inputChanged}
-        placeholder="Priority"
-        name="priority"
-        value={todo.priority}
-      />
-      <button onClick={addTodo}>Add</button>
-      <div
-        className="ag-theme-material"
-        style={{ height: "700px", width: "70%", margin: "auto" }}
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Stack
+        direction="row"
+        spacing={2}
+        justifyContent="center"
+        alignItems="center"
       >
-        <AgGridReact
-          ref={gridRef}
-          onGridReady={(params) => (gridRef.current = params.api)}
-          rowSelection="single"
-          columnDefs={columns}
-          rowData={todos}
-          domLayout="autoHeight"
-          animateRows={true}
-        ></AgGridReact>
-      </div>
+        <TextField
+          label="Date"
+          variant="standard"
+          name="date"
+          value={todo.date}
+          onChange={inputChanged}
+        />
 
-      <table>
-        <tbody>
-          {todos.map((todo, index) => (
-            <tr key={index}>
-              <td>{todo.description}</td>
-              <td>{todo.date}</td>
-              <td>{todo.priority}</td>
-              <button onClick={deleteTodo}>Delete</button>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+        <DatePicker
+          label="Description"
+          variant="standard"
+          name="description"
+          value={todo.description}
+          onChange={inputChanged}
+        />
+
+        <TextField
+          label="Priority"
+          variant="standard"
+          onChange={inputChanged}
+          name="priority"
+          value={todo.priority}
+        />
+        <Button onClick={addTodo} variant="contained">
+          Add
+        </Button>
+        <Button onClick={deleteTodo} variant="contained">
+          Delete
+        </Button>
+        <div
+          className="ag-theme-material"
+          style={{ height: "700px", width: "70%", margin: "auto" }}
+        >
+          <AgGridReact
+            ref={gridRef}
+            onGridReady={(params) => (gridRef.current = params.api)}
+            rowSelection="single"
+            columnDefs={columns}
+            rowData={todos}
+            domLayout="autoHeight"
+            animateRows={true}
+          ></AgGridReact>
+        </div>
+      </Stack>
+    </LocalizationProvider>
   );
 }
 
